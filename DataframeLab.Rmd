@@ -7,7 +7,14 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(tidyverse)
+#library(tidyverse)
+library(dplyr)
+library(magrittr)
+library(ggplot2)
+library(readr)
+library(datasets)
+
+
 ```
 
 # Working with loaded in csv files
@@ -30,7 +37,7 @@ Because you're in an RProject, you don't need to set your working directory in R
 - Use the glimpse function to look at the loaded data
 
 ```{r}
-
+glimpse(grants)
 
 ```
 
@@ -38,8 +45,8 @@ Because you're in an RProject, you don't need to set your working directory in R
 - Create a variable `org` that contains the `organization` column of the dataset
 
 ```{r}
-
-
+org <- grants$organization
+org
 ```
 
 
@@ -47,7 +54,7 @@ Because you're in an RProject, you don't need to set your working directory in R
 
 ```{r}
 
-
+is.vector(org)
 ```
 
 
@@ -56,6 +63,8 @@ Now you can ask some interesting questions about the dataset:
 - What was the mean grant value?
 
 ```{r}
+money <- grants$total_amount
+mean(money)
 
 ```
 
@@ -63,21 +72,21 @@ Now you can ask some interesting questions about the dataset:
 - What was the dollar amount of the largest grant?
 
 ```{r}
-
+max(money)
 ```
 
 
 - What was the dollar amount of the smallest grant?
 
 ```{r}
-
+min(money)
 ```
 
 
 - Which organization received the largest grant?
 
 ```{r}
-
+org[(which(money == max(money)))]
 
 ```
 
@@ -85,19 +94,23 @@ Now you can ask some interesting questions about the dataset:
 - Which organization received the smallest grant?
 
 ```{r}
-
+org[(which(money == min(money)))]
+glimpse(grants)
 ```
 
 - How many grants were awarded in 2010?
 
 ```{r}
+start_year <- grants$start_year
+
+length(grants$start_year ==2010)
 
 ```
 
 - How much was awarded in 2010? 
 
 ```{r}
-
+sum(grants$start_year ==2010)
 ```
 
 
@@ -107,7 +120,9 @@ Load R's "USPersonalExpenditure" dataset using the `data()` function
 
 This will produce a data frame called `USPersonalExpenditure`
 ```{r}
-data("USPersonalExpenditure")
+
+data(USPersonalExpenditure)
+
 ```
 
 The variable `USPersonalExpenditure` is now accessible to you. Unfortunately, it's not a data frame (it's actually a matrix, you can find that out using) 
@@ -123,13 +138,13 @@ Luckily, you can pass the USPersonalExpenditure variable as an argument to the `
 Do this, storing the result in a new variable
 
 ```{r}
-
+data.frame(USPersonalExpenditure)
 ```
 
 
 What are the current column names of your dataframe?
 ```{r}
-
+colnames(USPersonalExpenditure)
 ```
 
 
@@ -137,20 +152,21 @@ Consider: why are they so strange? (Think about whether you could use a number l
 
 What are the current row names of your dataframe?
 ```{r}
-
+rownames(USPersonalExpenditure)
 ```
 
 
 Add a column "Category" to your data frame that contains the rownames
 
 ```{r}
-
+USPersonalExpenditure$Catergory <- rownames(USPersonalExpenditure)
+data.frame(USPersonalExpenditure)
 ```
 
 Consider how this data isn't tidy. Use the `pivot_longer()` function from last class to make the data tidy. 
 
 ```{r}
-
+#USPersonalExpenditure<- pivot_longer (USPersonalExpenditure), #c((("X1940","X1945","X1950","X1955","X1960")),name_to = "year" , values to "Money_Spent")
 ```
 
 
